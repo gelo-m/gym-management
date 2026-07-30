@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "@/services/authService";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -53,8 +53,6 @@ export default function Login() {
             <CardContent className="p-6">
                 <div className="flex items-center">
                 <form  className="w-full" onSubmit={handleSubmit}>
-
-
                     <Label className="font-medium mb-2 text-slate-950">Email</Label>
                     <Input
                         name="email"

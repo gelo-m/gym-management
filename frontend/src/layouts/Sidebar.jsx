@@ -1,4 +1,4 @@
-import { LayoutDashboard, Users, CreditCard, CalendarDays } from "lucide-react";
+import { LayoutDashboard, Users, CreditCard, CalendarDays, Dumbbell } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 export default function Sidebar() {
@@ -14,7 +14,16 @@ export default function Sidebar() {
     return (
         <div className="w-64 min-h-screen bg-slate-900 text-white p-5">
             <h2 className="text-2xl font-bold text-blue-400 mb-10">
-                Gym Bro
+                {/* <Dumbbell className="h-5 w-5 text-blue-500" /> Gym Bro */}
+
+                <div className="flex flex-row">
+                    <div className="flex flex-col mr-2">
+                        <Dumbbell className="h-6 w-6 text-blue-500" />
+                    </div>
+                    <div className="flex flex-col">
+                        Gym Bro
+                    </div>
+                </div>
             </h2>
 
             <nav className="space-y-2">
