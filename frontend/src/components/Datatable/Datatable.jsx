@@ -23,44 +23,49 @@ export default function DataTable({
         getCoreRowModel: getCoreRowModel(),
     });
 
+    const headers = table.getHeaderGroups()[0].headers;
+    const rows = table.getRowModel().rows;
+
     return (
-        <div className="rounded-xl border overflow-hidden">
+        <div className="rounded-xl overflow-hidden">
             <Table>
                 <TableHeader>
-                    {table.getHeaderGroups().map((headerGroup) => (
-                        <TableRow
-                            className="
-                                border-b
-                                border-slate-100
-                                hover:bg-slate-50
-                                transition-colors"
-                            >
-                            {headerGroup.headers.map((header) => (
-                                <TableHead className="font-semibold text-slate-700">
+                    <TableRow
+                        className="
+                            border-b
+                            border-slate-100
+                            hover:bg-slate-50
+                            transition-colors"
+                        >
+                        {
+                            headers?.map((header) => (
+                                <TableHead className="font-semibold text-slate-700" key={header.id}>
                                     {flexRender(
                                         header.column.columnDef.header,
                                         header.getContext()
                                     )}
                                 </TableHead>
-                            ))}
-                        </TableRow>
-                    ))}
+                            ))
+                        }
+                    </TableRow>
                 </TableHeader>
 
                 <TableBody>
-                    {table.getRowModel().rows.map((row) => (
+                    {rows?.map((row) => (
                         <TableRow
                             key={row.id}
                             className="hover:bg-slate-50 cursor-pointer transition-colors"
                         >
-                            {row.getVisibleCells().map((cell) => (
-                                <TableCell className="py-5">
-                                    {flexRender(
-                                        cell.column.columnDef.cell,
-                                        cell.getContext()
-                                    )}
-                                </TableCell>
-                            ))}
+                            {
+                                row.getVisibleCells().map((cell) => (
+                                    <TableCell className="py-3" key={cell.id}>
+                                        {flexRender(
+                                            cell.column.columnDef.cell,
+                                            cell.getContext()
+                                        )}
+                                    </TableCell>
+                                ))
+                            }
                         </TableRow>
                     ))}
                 </TableBody>
