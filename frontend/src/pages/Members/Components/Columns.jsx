@@ -9,9 +9,28 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { actions } from "./MemberData";
-import MemberDialog from "../MemberDialog";
 
-export const columns = [
+const initials = (data) => {
+    const name = [
+        data.first_name,
+        data.middle_name,
+        data.last_name,
+    ]
+    .filter(Boolean)
+    .join(" ");
+
+    const avatar = [
+        data.first_name?.[0],
+        data.last_name?.[0],
+    ]
+    .filter(Boolean)
+    .join("")
+    .toUpperCase();
+
+    return {name: name, avatar: avatar}
+}
+
+export const createColumns = (handleAction) => [
     {
         accessorKey: "member_id",
         header: "Member ID",
@@ -20,24 +39,18 @@ export const columns = [
         accessorKey: "name",
         header: "Name",
         cell: ({ row }) => {
-            const name = row.original.name;
-    
-            const initials = name
-                .split(" ")
-                .map(word => word[0])
-                .join("")
-                .toUpperCase();
+            const setInitial = initials(row.original);
     
             return (
                 <div className="flex items-center gap-3">
                     <Avatar className="h-9 w-9">
                         <AvatarFallback>
-                            {initials}
+                            {setInitial.avatar}
                         </AvatarFallback>
                     </Avatar>
     
                     <span className="font-medium">
-                        {name}
+                        {setInitial.name}
                     </span>
                 </div>
             );
@@ -141,12 +154,7 @@ export const columns = [
     {
         accessorKey: "Actions",
         id: "actions",
-        cell: ({ row }) => {
-            function handleAction(action, original) {
-                // console.log(action);
-                // console.log(original);
-            }
-        
+        cell: ({ row }) => {        
             return (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>

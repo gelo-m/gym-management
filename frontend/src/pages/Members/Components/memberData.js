@@ -5,7 +5,9 @@ import { MemberAction } from "../../../constants/memberAction";
 export const members = [
     {
         member_id: "MBR0001",
-        name: "John Doe",
+        first_name: "John",
+        middle_name: "Wesley",
+        last_name: "Doe",
         contact: "09171234567",
         plan: "Monthly",
         start_date: "2026-07-01",
@@ -14,7 +16,9 @@ export const members = [
     },
     {
         member_id: "MBR0002",
-        name: "Jane Smith",
+        first_name: "Jane",
+        middle_name: "Carter",
+        last_name: "Smith",
         contact: "09181234567",
         plan: "Annual",
         start_date: "2026-01-01",
@@ -23,7 +27,9 @@ export const members = [
     },
     {
         member_id: "MBR0003",
-        name: "Michael Santos",
+        first_name: "Michael",
+        middle_name: "Angelo",
+        last_name: "Santos",
         contact: "09191234567",
         plan: "Monthly",
         start_date: "2026-05-01",

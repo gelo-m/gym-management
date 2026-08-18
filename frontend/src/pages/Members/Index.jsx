@@ -1,5 +1,6 @@
+import { useState } from "react";
 import DataTable from "@/components/DataTable/DataTable";
-import { columns } from "./Components/Columns";
+import { createColumns } from "./Components/Columns";
 import { members, status } from "./Components/MemberData.js";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,8 +10,7 @@ import {
     Users,
     UserCheck,
     AlertTriangle,
-    UserPlus,
-    Search
+    UserPlus
 } from "lucide-react";
 import {
     Select,
@@ -19,14 +19,33 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { useState } from "react";
 import DataTablePagination from "@/components/DataTable/DataTablePagination";
 import MemberDialog from "./MemberDialog";
-
 
 export default function Members() {
     const [page, setPage] = useState(1);
     const [openDialog, setOpenDialog] = useState(false);
+    const [selectedMember, setSelectedMember] = useState(null);
+    const [mode, setMode] = useState("create");
+
+    const handleAction = (action, member) => {
+        switch (action) {
+            case "Edit":
+                setMode("edit");
+                setSelectedMember(member);
+                setOpenDialog(true);
+                break;
+            case "View":
+                break;
+            case "Delete":
+                break;
+        }
+    }
+
+    const columns = createColumns (handleAction);
+    // const selected = (isEdit) => {
+    //     setSelectedMember(null);
+    // }
     
     return (
         <div className="space-y-6">
@@ -108,13 +127,17 @@ export default function Members() {
                         </div>
                         
                         <div className="flex gap-2">
-                            <Button className="bg-blue-500 text-white !h-10"  onClick={() => setOpenDialog(true)}>
+                            <Button className="bg-blue-500 text-white !h-10" onClick={() => {
+                                setMode("create");
+                                setOpenDialog(true);
+                            }}>
                                 Add Member
                             </Button>
                         </div>
                     </div>
-                    
                     <MemberDialog
+                        mode={mode}
+                        member={selectedMember}
                         open={openDialog}
                         onOpenChange={setOpenDialog}
                     />
