@@ -28,7 +28,7 @@ export default function MemberDialog({
     mode,
     member,
     open,
-    onOpenChange,
+    onOpenChange
 }) {
     const [formData, setFormData] = useState(emptyForm);
 
@@ -54,7 +54,6 @@ export default function MemberDialog({
         if (isOpen) return;
         onOpenChange(isOpen);
         setFormData(emptyForm);
-        // setSelectedMember(null);
     }
 
     return (

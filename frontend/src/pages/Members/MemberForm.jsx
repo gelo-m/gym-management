@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -13,7 +12,7 @@ export default function MemberForm({formData, handleFormData}) {
                     <Input
                         className="h-11"
                         name="first_name"
-                        value={formData.first_name}
+                        value={formData.first_name ?? ""}
                         onChange={handleFormData}
                         placeholder="Enter last name"
                     />
@@ -23,7 +22,7 @@ export default function MemberForm({formData, handleFormData}) {
                     <Input
                         className="h-11"
                         name="middle_name"
-                        value={formData.middle_name}
+                        value={formData.middle_name ?? ""}
                         onChange={handleFormData}
                         placeholder="Enter middle name"
                     />
@@ -33,7 +32,7 @@ export default function MemberForm({formData, handleFormData}) {
                     <Input
                         className="h-11"
                         name="last_name"
-                        value={formData.last_name}
+                        value={formData.last_name ?? ""}
                         onChange={handleFormData}
                         placeholder="Enter last name"
                     />
@@ -43,7 +42,7 @@ export default function MemberForm({formData, handleFormData}) {
                     <Input
                         className="h-11"
                         name="mobile_number"
-                        value={formData.mobile_number}
+                        value={formData.mobile_number ?? ""}
                         onChange={handleFormData}
                         placeholder="09xxxxxxxxx"
                     />
@@ -55,7 +54,7 @@ export default function MemberForm({formData, handleFormData}) {
                         className="h-11"
                         name="email"
                         type="email"
-                        value={formData.email}
+                        value={formData.email ?? ""}
                         placeholder="Enter email"
                         onChange={handleFormData}
                     />
@@ -67,7 +66,7 @@ export default function MemberForm({formData, handleFormData}) {
                         className="h-11"
                         name="birth_date"
                         type="date"
-                        value={formData.birth_date}
+                        value={formData.birth_date ?? ""}
                         onChange={handleFormData}
                     />
                 </div>
@@ -76,7 +75,7 @@ export default function MemberForm({formData, handleFormData}) {
                     <Label>Gender</Label>
                     <select
                         name="gender"
-                        value={formData.gender}
+                        value={formData.gender ?? ""}
                         onChange={handleFormData}
                         className="w-full h-11 border rounded-md px-3"
                     >
@@ -98,7 +97,7 @@ export default function MemberForm({formData, handleFormData}) {
                     <Textarea
                         className="resize-none"
                         name="address"
-                        value={formData.address}
+                        value={formData.address ?? ""}
                         onChange={handleFormData}
                         rows="1"
                         placeholder="Enter complete address"

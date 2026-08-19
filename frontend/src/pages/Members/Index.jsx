@@ -1,6 +1,7 @@
 import { useState } from "react";
 import DataTable from "@/components/DataTable/DataTable";
 import { createColumns } from "./Components/Columns";
+import DeleteDialog from "./Components/DeleteDialog";
 import { members, status } from "./Components/MemberData.js";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -27,8 +28,11 @@ export default function Members() {
     const [openDialog, setOpenDialog] = useState(false);
     const [selectedMember, setSelectedMember] = useState(null);
     const [mode, setMode] = useState("create");
+    const [membersData, setMembersData] = useState(members);
+    const [selectedIndex, setSelectedIndex] = useState(0);
+    const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
-    const handleAction = (action, member) => {
+    const handleAction = (rowIndex, action, member) => {
         switch (action) {
             case "Edit":
                 setMode("edit");
@@ -38,14 +42,28 @@ export default function Members() {
             case "View":
                 break;
             case "Delete":
+                // setMembersData(membersData.filter((item, index) => index != rowIndex));
+                setSelectedMember(member);
+                setSelectedIndex(rowIndex);
+                setOpenDeleteDialog(true);
                 break;
         }
     }
 
     const columns = createColumns (handleAction);
-    // const selected = (isEdit) => {
-    //     setSelectedMember(null);
-    // }
+
+    const handleDeleteConfirm = () => {
+
+        setMembersData(
+            membersData.filter(
+                (_, index) => index !== selectedIndex
+            )
+        );
+    
+        setOpenDeleteDialog(false);
+        setSelectedMember(null);
+        setSelectedIndex(null);
+    };
     
     return (
         <div className="space-y-6">
@@ -141,7 +159,7 @@ export default function Members() {
                         open={openDialog}
                         onOpenChange={setOpenDialog}
                     />
-                    <DataTable columns={columns} data={members} />
+                    <DataTable columns={columns} data={membersData} />
                     <DataTablePagination
                         page={page}
                         totalPages={100}
@@ -150,6 +168,13 @@ export default function Members() {
                 </CardContent>
 
             </Card>
+
+            <DeleteDialog
+                open={openDeleteDialog}
+                onOpenChange={setOpenDeleteDialog}
+                member={selectedMember}
+                onConfirm={handleDeleteConfirm}
+            />
         </div>
     );
 }

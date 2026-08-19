@@ -40,7 +40,6 @@ export const createColumns = (handleAction) => [
         header: "Name",
         cell: ({ row }) => {
             const setInitial = initials(row.original);
-    
             return (
                 <div className="flex items-center gap-3">
                     <Avatar className="h-9 w-9">
@@ -169,7 +168,7 @@ export const createColumns = (handleAction) => [
                                     <DropdownMenuItem 
                                         key={item.value}
                                         className={item.className}
-                                        onClick={() => handleAction(item.action, row.original)}
+                                        onClick={() => handleAction(row.index, item.action, row.original)}
                                     >
                                         {item.label}
                                     </DropdownMenuItem>
