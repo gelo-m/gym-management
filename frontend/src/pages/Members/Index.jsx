@@ -1,7 +1,7 @@
 import { useState } from "react";
 import DataTable from "@/components/DataTable/DataTable";
 import { createColumns } from "./Components/Columns";
-import DeleteDialog from "./Components/DeleteDialog";
+import ConfirmDialog from "../../components/dialogs/ConfirmDialog";
 import { members, status } from "./Components/MemberData.js";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -42,7 +42,6 @@ export default function Members() {
             case "View":
                 break;
             case "Delete":
-                // setMembersData(membersData.filter((item, index) => index != rowIndex));
                 setSelectedMember(member);
                 setSelectedIndex(rowIndex);
                 setOpenDeleteDialog(true);
@@ -53,7 +52,6 @@ export default function Members() {
     const columns = createColumns (handleAction);
 
     const handleDeleteConfirm = () => {
-
         setMembersData(
             membersData.filter(
                 (_, index) => index !== selectedIndex
@@ -169,10 +167,13 @@ export default function Members() {
 
             </Card>
 
-            <DeleteDialog
+            <ConfirmDialog
                 open={openDeleteDialog}
                 onOpenChange={setOpenDeleteDialog}
-                member={selectedMember}
+                title="Delete Member"
+                description={`Are you sure you want to delete ${selectedMember?.first_name} ${selectedMember?.last_name}? This action cannot be undone.`}
+                confirmText="Delete"
+                confirmButtonClass="bg-red-600 hover:bg-red-700"
                 onConfirm={handleDeleteConfirm}
             />
         </div>

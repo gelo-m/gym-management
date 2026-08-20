@@ -6,39 +6,43 @@ import {
 } from "@/components/ui/dialog";
 
 import { Button } from "@/components/ui/button";
-import { Trash2 } from "lucide-react";
+import { AlertTriangle } from "lucide-react";
 
-export default function DeleteDialog({
+export default function ConfirmDialog({
     open,
     onOpenChange,
-    member,
+    title = "Confirmation",
+    description = "",
+    confirmText = "Confirm",
+    cancelText = "Cancel",
     onConfirm,
+    confirmButtonClass = "",
 }) {
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-md">
-
+            <DialogContent className="
+                sm:max-w-md
+                bg-white
+                border-0
+                shadow-2xl
+                rounded-2xl
+                p-4
+                overflow-hidden
+            ">
                 <div className="flex justify-center">
                     <div className="h-16 w-16 rounded-full bg-red-100 flex items-center justify-center">
-                        <Trash2 className="h-8 w-8 text-red-600" />
+                        <AlertTriangle className="h-8 w-8 text-red-600" />
                     </div>
                 </div>
 
                 <DialogHeader>
-                    <DialogTitle className="text-center text-xl">
-                        ⚠ Delete Member
-
-                        This action cannot be undone.
+                    <DialogTitle className="text-center">
+                        {title}
                     </DialogTitle>
                 </DialogHeader>
 
-                <p className="text-sm text-slate-500 text-center">
-                    Are you sure you want to delete
-                    <span className="font-semibold">
-                        {" "}
-                        {member?.first_name} {member?.last_name}
-                    </span>
-                    ?
+                <p className="text-center text-slate-500">
+                    {description}
                 </p>
 
                 <div className="flex justify-end gap-3 mt-4">
@@ -46,17 +50,16 @@ export default function DeleteDialog({
                         variant="outline"
                         onClick={() => onOpenChange(false)}
                     >
-                        Cancel
+                        {cancelText}
                     </Button>
 
                     <Button
-                        className="bg-red-600 hover:bg-red-700"
+                        className={confirmButtonClass}
                         onClick={onConfirm}
                     >
-                        Delete
+                        {confirmText}
                     </Button>
                 </div>
-
             </DialogContent>
         </Dialog>
     );

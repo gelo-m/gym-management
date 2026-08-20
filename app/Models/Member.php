@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Enums\Gender;
 use App\Enums\MemberStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -35,6 +34,8 @@ class Member extends Model implements Auditable
     protected $casts = [
         'birth_date' => 'date',
         'joined_at' => 'date',
+        'gender' => Gender::class,
+        'status' => MemberStatus::class,
     ];
 
     protected $auditInclude = [
@@ -75,6 +76,7 @@ class Member extends Model implements Auditable
 
     public function getStatusLabelAttribute()
     {
-        return MemberStatus::getDescription($this->status);
+        // return MemberStatus::getDescription($this->status);
+        return $this->status->description;
     }
 }
