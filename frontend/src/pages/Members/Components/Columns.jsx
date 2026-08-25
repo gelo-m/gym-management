@@ -32,7 +32,7 @@ const initials = (data) => {
 
 export const createColumns = (handleAction) => [
     {
-        accessorKey: "member_id",
+        accessorKey: "member_no",
         header: "Member ID",
     },
     {
@@ -56,7 +56,7 @@ export const createColumns = (handleAction) => [
         },
     },
     {
-        accessorKey: "contact",
+        accessorKey: "mobile_number",
         header: ({ column }) => (
             <Button
                 variant="ghost"
@@ -88,7 +88,7 @@ export const createColumns = (handleAction) => [
         ),
     },
     {
-        accessorKey: "start_date",
+        accessorKey: "joined_at",
         header: ({ column }) => (
             <Button
                 variant="ghost"
@@ -122,7 +122,7 @@ export const createColumns = (handleAction) => [
     {
         accessorKey: "status",
         cell: ({ row }) => {
-            const status = row.original.status;
+            const status = row.original.status_label;
 
             return (
                 <Badge

@@ -23,6 +23,7 @@ const emptyForm = {
     joined_at: "",
     status: "",
 }
+import { createMember, getMembers } from "@/services/memberService";
 
 export default function MemberDialog({
     mode,
@@ -54,6 +55,19 @@ export default function MemberDialog({
         if (isOpen) return;
         onOpenChange(isOpen);
         setFormData(emptyForm);
+    }
+
+    const handleSubmit = async () => {
+        try {
+            const response = await createMember(formData);
+    
+            getMembers();
+    
+            handleDialogClose(false);
+    
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     return (
@@ -107,6 +121,7 @@ export default function MemberDialog({
                             shadow-md
                             text-white
                             !h-12"
+                        onClick={handleSubmit}
                     >
                         Save Member
                     </Button>

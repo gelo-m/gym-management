@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import DataTable from "@/components/DataTable/DataTable";
 import { createColumns } from "./Components/Columns";
 import ConfirmDialog from "../../components/dialogs/ConfirmDialog";
-import { members, status } from "./Components/MemberData.js";
+import { status } from "./Components/MemberData.js";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
@@ -22,13 +22,14 @@ import {
 } from "@/components/ui/select";
 import DataTablePagination from "@/components/DataTable/DataTablePagination";
 import MemberDialog from "./MemberDialog";
+import { getMembers } from "@/services/memberService";
 
 export default function Members() {
     const [page, setPage] = useState(1);
     const [openDialog, setOpenDialog] = useState(false);
     const [selectedMember, setSelectedMember] = useState(null);
     const [mode, setMode] = useState("create");
-    const [membersData, setMembersData] = useState(members);
+    const [membersData, setMembersData] = useState([]);
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
@@ -61,6 +62,20 @@ export default function Members() {
         setOpenDeleteDialog(false);
         setSelectedMember(null);
         setSelectedIndex(null);
+    }
+
+    useEffect(() => {
+        fetchMembers();
+    }, []);
+    
+    const fetchMembers = async () => {
+        try {
+            const response = await getMembers();
+    
+            setMembersData(response.data.data);
+        } catch (error) {
+            console.error(error);
+        }
     };
     
     return (

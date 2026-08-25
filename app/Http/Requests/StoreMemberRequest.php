@@ -12,7 +12,7 @@ class StoreMemberRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -38,8 +38,8 @@ class StoreMemberRequest extends FormRequest
             'emergency_contact_name' => ['nullable', 'string'],
             'emergency_contact_number' => ['nullable', 'string'],
 
-            'joined_at' => ['required', 'date'],
-            'status' => ['required', 'integer'],
+            // 'joined_at' => ['required', 'date'],
+            // 'status' => ['required', 'integer'],
         ];
     }
 }
