@@ -23,19 +23,23 @@ const emptyForm = {
     joined_at: "",
     status: "",
 }
-import { createMember, getMembers } from "@/services/memberService";
+import { createMember, updateMember } from "@/services/memberService";
 
 export default function MemberDialog({
     mode,
     member,
     open,
-    onOpenChange
+    onOpenChange,
+    fetchMembers
 }) {
     const [formData, setFormData] = useState(emptyForm);
 
     useEffect(() => {
         if (mode === "edit" && member) {
-            setFormData(member);
+            setFormData({
+                ...emptyForm,
+                ...member,
+            });
         }
     
         if (mode === "create") {
@@ -59,10 +63,14 @@ export default function MemberDialog({
 
     const handleSubmit = async () => {
         try {
-            const response = await createMember(formData);
+
+            if (mode === "create") {
+                await createMember(formData);
+            } else {
+                await updateMember(member.id, formData);
+            }
     
-            getMembers();
-    
+            await fetchMembers();    
             handleDialogClose(false);
     
         } catch (error) {

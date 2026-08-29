@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/select";
 import DataTablePagination from "@/components/DataTable/DataTablePagination";
 import MemberDialog from "./MemberDialog";
-import { getMembers } from "@/services/memberService";
+import { getMembers, deleteMember } from "@/services/memberService";
 
 export default function Members() {
     const [page, setPage] = useState(1);
@@ -30,7 +30,7 @@ export default function Members() {
     const [selectedMember, setSelectedMember] = useState(null);
     const [mode, setMode] = useState("create");
     const [membersData, setMembersData] = useState([]);
-    const [selectedIndex, setSelectedIndex] = useState(0);
+    const [metaData, setMetaData] = useState({});
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
     const handleAction = (rowIndex, action, member) => {
@@ -44,7 +44,6 @@ export default function Members() {
                 break;
             case "Delete":
                 setSelectedMember(member);
-                setSelectedIndex(rowIndex);
                 setOpenDeleteDialog(true);
                 break;
         }
@@ -52,20 +51,21 @@ export default function Members() {
 
     const columns = createColumns (handleAction);
 
-    const handleDeleteConfirm = () => {
-        setMembersData(
-            membersData.filter(
-                (_, index) => index !== selectedIndex
-            )
-        );
+    const handleDeleteConfirm = async () => {
+        try {
+            await deleteMember(selectedMember.id);
+            await fetchMembers();
     
-        setOpenDeleteDialog(false);
-        setSelectedMember(null);
-        setSelectedIndex(null);
+            setOpenDeleteDialog(false);
+            setSelectedMember(null);
+    
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     useEffect(() => {
-        fetchMembers();
+        fetchMembers(1);
     }, []);
     
     const fetchMembers = async () => {
@@ -73,6 +73,8 @@ export default function Members() {
             const response = await getMembers();
     
             setMembersData(response.data.data);
+            setMetaData(response.data.meta);
+
         } catch (error) {
             console.error(error);
         }
@@ -171,9 +173,11 @@ export default function Members() {
                         member={selectedMember}
                         open={openDialog}
                         onOpenChange={setOpenDialog}
+                        fetchMembers={fetchMembers}
                     />
                     <DataTable columns={columns} data={membersData} />
                     <DataTablePagination
+                        metaData={metaData}
                         page={page}
                         totalPages={100}
                         onPageChange={setPage}
@@ -186,7 +190,7 @@ export default function Members() {
                 open={openDeleteDialog}
                 onOpenChange={setOpenDeleteDialog}
                 title="Delete Member"
-                description={`Are you sure you want to delete ${selectedMember?.first_name} ${selectedMember?.last_name}? This action cannot be undone.`}
+                description={`Are you sure you want to delete ${selectedMember?.full_name || ''}?`}
                 confirmText="Delete"
                 confirmButtonClass="bg-red-600 hover:bg-red-700"
                 onConfirm={handleDeleteConfirm}
