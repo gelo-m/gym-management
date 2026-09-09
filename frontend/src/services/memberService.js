@@ -4,10 +4,11 @@ export const createMember = async (payload) => {
     return await api.post("/members", payload);
 }
 
-export const getMembers = async (page = 1) => {
+export const getMembers = async (page = 1, filters) => {
     return await api.get("/members", {
         params: {
             page,
+            filters
         },
     });
 }

@@ -20,7 +20,7 @@ class MemberController extends Controller
      */
     public function index()
     {
-        $members = Member::latest()->paginate(2);
+        $members = Member::latest()->paginate(5);
     
         return MemberResource::collection($members);
     }
@@ -36,7 +36,6 @@ class MemberController extends Controller
         $member = Member::create([
             ...$request->validated(),
             'joined_at' => $today,
-            'status' => MemberStatus::ACTIVE,
             'member_no' => $this->generateMemberNo(),
         ]);
     
@@ -77,7 +76,7 @@ class MemberController extends Controller
 
     private function generateMemberNo(): string
     {
-        $latestMember = Member::latest('id')->first();
+        $latestMember = Member::withTrashed()->latest('id')->first();
 
         $nextNumber = $latestMember
             ? ((int) str_replace('MBR', '', $latestMember->member_no)) + 1

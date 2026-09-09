@@ -65,7 +65,8 @@ export default function MemberDialog({
         try {
 
             if (mode === "create") {
-                await createMember(formData);
+                const data = { ...formData, status: parseInt(formData.status), gender: parseInt(formData.gender) }
+                await createMember(data);
             } else {
                 await updateMember(member.id, formData);
             }

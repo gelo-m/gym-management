@@ -1,9 +1,11 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { gender } from "./Components/MemberData";
+import { gender, status } from "./Components/MemberData";
 
 export default function MemberForm({formData, handleFormData}) {
+    const memberStatus = status.filter(item => item.value !== '');
+
     return (
         <>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -80,6 +82,25 @@ export default function MemberForm({formData, handleFormData}) {
                         className="w-full h-11 border rounded-md px-3"
                     >
                         {gender.map((item) => (
+                            <option
+                                key={item.value}
+                                value={item.value}
+                            >
+                                {item.label}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
+                <div className="space-y-2">
+                    <Label>Status</Label>
+                    <select
+                        name="status"
+                        value={formData.status ?? ""}
+                        onChange={handleFormData}
+                        className="w-full h-11 border rounded-md px-3"
+                    >
+                        {memberStatus.map((item) => (
                             <option
                                 key={item.value}
                                 value={item.value}

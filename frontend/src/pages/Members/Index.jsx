@@ -20,12 +20,16 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import DataTablePagination from "@/components/DataTable/DataTablePagination";
+// import DataTablePagination from "@/components/DataTable/DataTablePagination";
 import MemberDialog from "./MemberDialog";
 import { getMembers, deleteMember } from "@/services/memberService";
 
 export default function Members() {
     const [page, setPage] = useState(1);
+    const [filters, setFilters] = useState({
+        keyword: '',
+        status: '',
+    });
     const [openDialog, setOpenDialog] = useState(false);
     const [selectedMember, setSelectedMember] = useState(null);
     const [mode, setMode] = useState("create");
@@ -65,12 +69,12 @@ export default function Members() {
     }
 
     useEffect(() => {
-        fetchMembers(1);
+        fetchMembers(1, filters);
     }, []);
     
-    const fetchMembers = async () => {
+    const fetchMembers = async (page = 1, filters = {}) => {
         try {
-            const response = await getMembers();
+            const response = await getMembers(page, filters);
     
             setMembersData(response.data.data);
             setMetaData(response.data.meta);
@@ -78,8 +82,26 @@ export default function Members() {
         } catch (error) {
             console.error(error);
         }
-    };
+    }
+
+    const handlePageChange = (newPage) => {
+        setPage(newPage);
+        fetchMembers(newPage);
+    }
+
+    const handleFilterChange = (
+        field,
+        value
+    ) => {
     
+        setFilters({
+            ...filters,
+            [field]: value,
+        });
+
+        console.log(field);
+    };
+
     return (
         <div className="space-y-6">
             {/* Header */}
@@ -138,10 +160,18 @@ export default function Members() {
                     <div className="flex justify-between mb-6">
                         <div className="flex justify-normal mb-6 gap-2">
                             <div className="w-80">
-                                <Input className="!h-11" placeholder="Search members..." />
+                                <Input
+                                    className="!h-11"
+                                    placeholder="Search members..."
+                                    name={filters.keyword ?? ""}
+                                    onChange={(e) => handleFilterChange(e, e.target.value)}
+                                />
                             </div>
-                            <div className="w-80">
-                                <Select>
+                            <div className="w-50">
+                                <Select
+                                    value={filters.status}
+                                    onValueChange={(e) => handleFilterChange("status", e)}
+                                >
                                     <SelectTrigger className="w-full lg:w-48 !h-11">
                                         <SelectValue placeholder="Status" />
                                     </SelectTrigger>
@@ -149,13 +179,25 @@ export default function Members() {
                                     <SelectContent className="bg-white border border-slate-200 shadow-lg">
                                         {
                                             status.map((item) => (
-                                                <SelectItem className="pl-3 !h-11 border-gray-500" value={item.value} key={item.value}>
+                                                <SelectItem className="pl-3 !h-11 border-gray-500"
+                                                    name="status"
+                                                    value={item.value}
+                                                    key={item.value}
+                                                >
                                                     {item.label}
                                                 </SelectItem>
                                             ))
                                         }
                                     </SelectContent>
                                 </Select>
+                            </div>
+
+                            <div className="w-20">
+                                <Button className="bg-blue-500 text-white !h-11" onClick={() => {
+                                    fetchMembers();
+                                }}>
+                                    Search
+                                </Button>
                             </div>
                         </div>
                         
@@ -175,12 +217,12 @@ export default function Members() {
                         onOpenChange={setOpenDialog}
                         fetchMembers={fetchMembers}
                     />
-                    <DataTable columns={columns} data={membersData} />
-                    <DataTablePagination
+                    <DataTable
+                        columns={columns}
+                        data={membersData}
                         metaData={metaData}
                         page={page}
-                        totalPages={100}
-                        onPageChange={setPage}
+                        onPageChange={handlePageChange}
                     />
                 </CardContent>
 

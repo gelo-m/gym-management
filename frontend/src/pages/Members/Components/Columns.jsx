@@ -66,7 +66,7 @@ export const createColumns = (handleAction) => [
                     )
                 }
             >
-                Contact
+                Mobile Number
                 <ArrowUpDown className="ml-2 h-4 w-4" />
             </Button>
         ),

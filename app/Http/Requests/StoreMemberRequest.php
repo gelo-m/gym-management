@@ -31,7 +31,7 @@ class StoreMemberRequest extends FormRequest
             'email' => ['nullable', 'email'],
 
             'birth_date' => ['nullable', 'date'],
-            'gender' => ['nullable', 'integer'],
+            'gender' => ['required', 'integer'],
 
             'address' => ['nullable', 'string'],
 
@@ -39,7 +39,7 @@ class StoreMemberRequest extends FormRequest
             'emergency_contact_number' => ['nullable', 'string'],
 
             // 'joined_at' => ['required', 'date'],
-            // 'status' => ['required', 'integer'],
+            'status' => ['required', 'integer'],
         ];
     }
 }

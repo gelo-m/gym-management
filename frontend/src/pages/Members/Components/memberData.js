@@ -43,6 +43,7 @@ export const status = [
     { value: MemberStatus.ACTIVE, label: "Active"},
     { value: MemberStatus.INACTIVE, label: "Inactive"},
     { value: MemberStatus.FROZEN, label: "Frozen"},
+    { value: MemberStatus.SUSPENDED, label: "Suspended"},
     { value: MemberStatus.EXPIRED, label: "Expired"},
 ];
 
