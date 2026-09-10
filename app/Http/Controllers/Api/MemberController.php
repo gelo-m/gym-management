@@ -18,11 +18,26 @@ class MemberController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $members = Member::latest()->paginate(5);
+        $filters = (object) $request->get('filters');
+        $list = Member::latest();
+
+        if (isset($filters->keyword) && $filters->keyword != '') {
+            $list->where(function($query) use ($filters) {
+                $query->where('member_no', 'LIKE', '%'.$filters->keyword)
+                    ->orWhere('first_name', 'LIKE', '%'.$filters->keyword)
+                    ;
+            });
+        }
+
+        if (isset($filters->status) && $filters->status !== '') {
+            $list->where('status', $filters->status);
+        }
+
+        $list = $list->paginate(5);
     
-        return MemberResource::collection($members);
+        return MemberResource::collection($list);
     }
 
     /**

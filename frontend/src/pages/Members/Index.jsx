@@ -93,14 +93,9 @@ export default function Members() {
         field,
         value
     ) => {
-    
-        setFilters({
-            ...filters,
-            [field]: value,
-        });
-
-        console.log(field);
-    };
+        const newFilters = { ...filters, [field]: value }
+        setFilters(newFilters);
+    }
 
     return (
         <div className="space-y-6">
@@ -163,14 +158,13 @@ export default function Members() {
                                 <Input
                                     className="!h-11"
                                     placeholder="Search members..."
-                                    name={filters.keyword ?? ""}
-                                    onChange={(e) => handleFilterChange(e, e.target.value)}
+                                    onChange={(e) => handleFilterChange("keyword", e.target.value)}
                                 />
                             </div>
                             <div className="w-50">
                                 <Select
                                     value={filters.status}
-                                    onValueChange={(e) => handleFilterChange("status", e)}
+                                    onValueChange={(value) => handleFilterChange("status", value)}
                                 >
                                     <SelectTrigger className="w-full lg:w-48 !h-11">
                                         <SelectValue placeholder="Status" />
@@ -193,9 +187,9 @@ export default function Members() {
                             </div>
 
                             <div className="w-20">
-                                <Button className="bg-blue-500 text-white !h-11" onClick={() => {
-                                    fetchMembers();
-                                }}>
+                                <Button className="bg-blue-500 text-white !h-11"
+                                    onClick={() => { fetchMembers(1, filters); }}
+                                >
                                     Search
                                 </Button>
                             </div>
