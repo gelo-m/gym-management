@@ -123,7 +123,7 @@ export default function MemberForm({formData, handleFormData}) {
                         rows="1"
                         placeholder="Enter complete address"
                     />
-                </div>         
+                </div>
             </div>
         </>
     );

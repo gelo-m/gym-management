@@ -10,6 +10,7 @@ import Members from "@/pages/Members/Index";
 import Plans from "@/pages/Plans/Index";
 import Attendance from "@/pages/Attendance/Index";
 import Payments from "@/pages/Payments/Index";
+import Register from "@/auth/Register";
 
 export const router = createBrowserRouter([
     {
@@ -21,6 +22,15 @@ export const router = createBrowserRouter([
                     {
                         path: "/login",
                         element: <Login />,
+                    },
+                ],
+            },
+            {
+                element: <AuthLayout />,
+                children: [
+                    {
+                        path: "/register",
+                        element: <Register />,
                     },
                 ],
             },

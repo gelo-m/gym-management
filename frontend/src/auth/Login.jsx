@@ -7,14 +7,13 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "../context/AuthContext";
 
-
 export default function Login() {
     const { setUser, setToken } = useAuth();
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
         email: "admin@gymbro.com",
-        password: "password",
+        password: "admin12345@",
     });
 
     const handleChange = (e) => {

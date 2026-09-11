@@ -8,20 +8,21 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import MemberForm from "./MemberForm";
+import { gender, status } from "./Components/MemberData";
 
 const emptyForm = {
     first_name: "",
     middle_name: "",
     last_name: "",
     birth_date: "",
-    gender: "",
+    gender: gender[0].value,
     mobile_number: "",
     email: "",
     address: "",
     emergency_contact_name: "",
     emergency_contact_number: "",
     joined_at: "",
-    status: "",
+    status: status[1].value,
 }
 import { createMember, updateMember } from "@/services/memberService";
 
@@ -70,12 +71,17 @@ export default function MemberDialog({
             } else {
                 await updateMember(member.id, formData);
             }
-    
-            await fetchMembers();    
-            handleDialogClose(false);
-    
+
+            // if (response !== undefined) {
+            //     await fetchMembers();
+            //     handleDialogClose(false);
+            // } else {
+            //     console.log('error');
+            // }
+
         } catch (error) {
-            console.error(error);
+            console.log('tangina');
+            console.error(error.response);
         }
     }
 

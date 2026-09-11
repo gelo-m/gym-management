@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use App\Enums\Role;
 
 class AuthController extends Controller
 {
@@ -44,6 +46,23 @@ class AuthController extends Controller
 
         return response()->json([
             'message' => 'Logged out'
+        ]);
+    }
+
+    public function register(Request $request)
+    {
+        $credentials = $request->validate([
+            'name' => ['required'],
+            'email' => ['required', 'email'],
+            'password' => ['required']
+        ]);
+
+        $credentials['role'] = Role::ADMIN;
+
+        $user = User::create($credentials);
+
+        return response()->json([
+            'user' => $user,
         ]);
     }
 }
