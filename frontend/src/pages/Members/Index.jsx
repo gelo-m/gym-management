@@ -20,9 +20,8 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-// import DataTablePagination from "@/components/DataTable/DataTablePagination";
 import MemberDialog from "./MemberDialog";
-import { getMembers, deleteMember } from "@/services/memberService";
+import { getMembers, deleteMember, getTotalMember } from "@/services/memberService";
 
 export default function Members() {
     const [page, setPage] = useState(1);
@@ -36,6 +35,7 @@ export default function Members() {
     const [membersData, setMembersData] = useState([]);
     const [metaData, setMetaData] = useState({});
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+    const [totalMember, setTotalMember] = useState(0);
 
     const handleAction = (rowIndex, action, member) => {
         switch (action) {
@@ -70,15 +70,25 @@ export default function Members() {
 
     useEffect(() => {
         fetchMembers(1, filters);
+        fetchTotalMember(filters);
     }, []);
     
     const fetchMembers = async (page = 1, filters = {}) => {
         try {
             const response = await getMembers(page, filters);
-    
+
             setMembersData(response.data.data);
             setMetaData(response.data.meta);
 
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    const fetchTotalMember = async (filters) => {
+        try {
+            const response = await getTotalMember(filters);
+            setTotalMember(response.data.data);
         } catch (error) {
             console.error(error);
         }
@@ -109,7 +119,7 @@ export default function Members() {
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-6">
                 <StatisticsCard
                     title="Total Members"
-                    value="1,250"
+                    value={totalMember}
                     subvalue="+12 this week"
                     icon={Users}
                     iconBg="bg-blue-100"
@@ -210,6 +220,7 @@ export default function Members() {
                         open={openDialog}
                         onOpenChange={setOpenDialog}
                         fetchMembers={fetchMembers}
+                        fetchTotalMember={fetchTotalMember}
                     />
                     <DataTable
                         columns={columns}

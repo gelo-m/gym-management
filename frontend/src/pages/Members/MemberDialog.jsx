@@ -31,7 +31,8 @@ export default function MemberDialog({
     member,
     open,
     onOpenChange,
-    fetchMembers
+    fetchMembers,
+    fetchTotalMember
 }) {
     const [formData, setFormData] = useState(emptyForm);
 
@@ -72,16 +73,15 @@ export default function MemberDialog({
                 await updateMember(member.id, formData);
             }
 
-            // if (response !== undefined) {
-            //     await fetchMembers();
-            //     handleDialogClose(false);
-            // } else {
-            //     console.log('error');
-            // }
+            await fetchMembers();
+            await fetchTotalMember();
+            handleDialogClose(false);
 
         } catch (error) {
-            console.log('tangina');
-            console.error(error.response);
+            if (error.response != undefined) {
+                const errorResponse = error.response.data;
+                console.log(errorResponse);
+            }
         }
     }
 

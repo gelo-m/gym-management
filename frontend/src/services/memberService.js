@@ -16,10 +16,19 @@ export const getMembers = async (page = 1, filters = {}) => {
 }
 
 export const updateMember = async (id, payload) => {
-    console.log(payload);
     return await api.put(`/members/${id}`, payload);
 }
 
 export const deleteMember = async (id) => {
     return await api.delete(`/members/${id}`);
+}
+
+export const getTotalMember = async (filters = {}) => {
+    return await api.get("/members/total", {
+        params: {
+            filters: {
+                ...filters
+            }
+        }
+    });
 }

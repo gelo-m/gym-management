@@ -61,7 +61,25 @@ class MemberController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the resource.
+     */
+    public function totalMembers(Request $request)
+    {
+        $filters = (object) $request->get('filters');
+        $list = Member::whereNull('deleted_at')->count();
+
+        if (isset($filters->status) && $filters->status !== '') {
+            $list->where('status', $filters->status);
+        }
+
+        return response()->json([
+            'message' => '',
+            'data' => $list
+        ], 200);
+    }
+
+    /**
+     * Display the resource.
      */
     public function show(string $id)
     {

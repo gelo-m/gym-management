@@ -29,12 +29,10 @@ api.interceptors.response.use((response) => {
         }
 
     } catch (error) {
-        console.log(error);
+        // console.log(error);
     }
 
-    // throw error;
-    // return Promise.reject(error);
-    
+    return Promise.reject(error);
 })
 
 export default api;
