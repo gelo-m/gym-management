@@ -35,9 +35,15 @@ export default function Members() {
     const [membersData, setMembersData] = useState([]);
     const [metaData, setMetaData] = useState({});
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-    const [totalMember, setTotalMember] = useState(0);
+    const [totalMember, setTotalMember] = useState({
+        all: 0,
+        active: 0,
+        active_current_month: 0,
+    });
+    const [sortBy, setSortBy] = useState("id");
+    const [sortDirection, setSortDirection] = useState("desc");
 
-    const handleAction = (rowIndex, action, member) => {
+    const handleAction = (action, member) => {
         switch (action) {
             case "Edit":
                 setMode("edit");
@@ -53,7 +59,21 @@ export default function Members() {
         }
     }
 
-    const columns = createColumns (handleAction);
+    const handleSort = (column) => {
+
+        let direction = "asc";
+    
+        if (sortBy === column && sortDirection === "asc") {
+            direction = "desc";
+        }
+    
+        setSortBy(column);
+        setSortDirection(direction);
+    
+        fetchMembers(page, filters, column, direction);
+    }
+
+    const columns = createColumns (handleAction, handleSort, sortBy, sortDirection);
 
     const handleDeleteConfirm = async () => {
         try {
@@ -69,13 +89,18 @@ export default function Members() {
     }
 
     useEffect(() => {
-        fetchMembers(1, filters);
+        fetchMembers(1, filters, sortBy, sortDirection);
         fetchTotalMember(filters);
     }, []);
     
-    const fetchMembers = async (page = 1, filters = {}) => {
+    const fetchMembers = async (
+        page = 1,
+        filters = {},
+        sortByParam = sortBy,
+        sortDirectionParam = sortDirection
+    ) => {
         try {
-            const response = await getMembers(page, filters);
+            const response = await getMembers(page, filters, sortByParam, sortDirectionParam);
 
             setMembersData(response.data.data);
             setMetaData(response.data.meta);
@@ -89,6 +114,7 @@ export default function Members() {
         try {
             const response = await getTotalMember(filters);
             setTotalMember(response.data.data);
+            console.log(totalMember);
         } catch (error) {
             console.error(error);
         }
@@ -119,7 +145,7 @@ export default function Members() {
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-6">
                 <StatisticsCard
                     title="Total Members"
-                    value={totalMember}
+                    value={totalMember.active}
                     subvalue="+12 this week"
                     icon={Users}
                     iconBg="bg-blue-100"

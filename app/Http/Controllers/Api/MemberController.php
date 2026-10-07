@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use App\Enums\MemberStatus;
 use App\Http\Resources\MemberResource;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 
 class MemberController extends Controller
@@ -21,7 +22,10 @@ class MemberController extends Controller
     public function index(Request $request)
     {
         $filters = (object) $request->get('filters');
-        $list = Member::latest();
+        $sortBy = $request->get('sort_by', 'id');
+        $sortDirection = $request->get('sort_direction', 'desc');
+
+        $list = Member::orderBy($sortBy, $sortDirection);
 
         if (isset($filters->keyword) && $filters->keyword != '') {
             $list->where(function($query) use ($filters) {
@@ -65,12 +69,44 @@ class MemberController extends Controller
      */
     public function totalMembers(Request $request)
     {
+        $active = MemberStatus::ACTIVE;
+        $inActive = MemberStatus::INACTIVE;
+        $frozen = MemberStatus::FROZEN;
+        $suspended = MemberStatus::SUSPENDED;
+        $expired = MemberStatus::EXPIRED;
+
         $filters = (object) $request->get('filters');
-        $list = Member::whereNull('deleted_at')->count();
+        $list = Member::select([
+                DB::raw("COUNT(id) as total_member"),
+                DB::raw("
+                    SUM(
+                        CASE 
+                            WHEN status != $active THEN -1
+                            ELSE 1
+                        END
+                    ) as total_active_member
+                "),
+                DB::raw("
+                    SUM(
+                        CASE 
+                            WHEN status = $active
+                                AND joined_at >= CURDATE()
+                                AND joined_at < LAST_DAY(CURDATE()) + INTERVAL 1 DAY
+                                    THEN -1
+                            ELSE 1
+                        END
+                    ) as total_active_member_current_month
+                "),
+            ])
+            ->whereNull('deleted_at')
+            ->first()
+            ;
 
         if (isset($filters->status) && $filters->status !== '') {
-            $list->where('status', $filters->status);
+            $list = $list->where('status', $filters->status);
         }
+
+        log::info(json_encode($list));
 
         return response()->json([
             'message' => '',

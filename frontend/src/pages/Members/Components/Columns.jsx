@@ -1,43 +1,50 @@
-import { MoreHorizontal, ArrowUpDown } from "lucide-react";
+import { initials } from "../../../utils/formatter.jsx"
+import { MoreHorizontal, ArrowUpDown, ArrowDown, ArrowUp } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { actions } from "./MemberData";
 
-const initials = (data) => {
-    const name = [
-        data.first_name,
-        data.middle_name,
-        data.last_name,
-    ]
-    .filter(Boolean)
-    .join(" ");
-
-    const avatar = [
-        data.first_name?.[0],
-        data.last_name?.[0],
-    ]
-    .filter(Boolean)
-    .join("")
-    .toUpperCase();
-
-    return {name: name, avatar: avatar}
-}
-
-export const createColumns = (handleAction) => [
+export const createColumns = (handleAction, handleSort, sortBy, sortDirection) => [
     {
         accessorKey: "member_no",
-        header: "Member ID",
+        header: () => (
+            <button
+                onClick={() =>
+                    handleSort("member_no")
+                }
+                className="flex items-center gap-2"
+            >
+                Member No
+                {
+                    sortBy === "member_no"
+                        ? sortDirection === "asc"
+                            ? <ArrowUp className="ml-2 h-4 w-4" />
+                            : <ArrowDown className="ml-2 h-4 w-4" />
+                        : <ArrowUpDown className="ml-2 h-4 w-4" />
+                }
+            </button>
+        ),
     },
     {
         accessorKey: "name",
-        header: "Name",
+        header: () => (
+            <button
+                onClick={() =>
+                    handleSort("first_name")
+                }
+                className="flex items-center gap-2"
+            >
+                Name
+                {
+                    sortBy === "first_name"
+                        ? sortDirection === "asc"
+                            ? <ArrowUp className="ml-2 h-4 w-4" />
+                            : <ArrowDown className="ml-2 h-4 w-4" />
+                        : <ArrowUpDown className="ml-2 h-4 w-4" />
+                }
+            </button>
+        ),
         cell: ({ row }) => {
             const setInitial = initials(row.original);
             return (
@@ -57,67 +64,19 @@ export const createColumns = (handleAction) => [
     },
     {
         accessorKey: "mobile_number",
-        header: ({ column }) => (
-            <Button
-                variant="ghost"
-                onClick={() =>
-                    column.toggleSorting(
-                        column.getIsSorted() === "asc"
-                    )
-                }
-            >
-                Mobile Number
-                <ArrowUpDown className="ml-2 h-4 w-4" />
-            </Button>
-        ),
+        header: "Mobile Number"
     },
     {
         accessorKey: "plan",
-        header: ({ column }) => (
-            <Button
-                variant="ghost"
-                onClick={() =>
-                    column.toggleSorting(
-                        column.getIsSorted() === "asc"
-                    )
-                }
-            >
-                Plan
-                <ArrowUpDown className="ml-2 h-4 w-4" />
-            </Button>
-        ),
+        header: "Plan"
     },
     {
         accessorKey: "joined_at",
-        header: ({ column }) => (
-            <Button
-                variant="ghost"
-                onClick={() =>
-                    column.toggleSorting(
-                        column.getIsSorted() === "asc"
-                    )
-                }
-            >
-                Start Date
-                <ArrowUpDown className="ml-2 h-4 w-4" />
-            </Button>
-        ),
+        header: "Start Date"
     },
     {
         accessorKey: "expiry_date",
-        header: ({ column }) => (
-            <Button
-                variant="ghost"
-                onClick={() =>
-                    column.toggleSorting(
-                        column.getIsSorted() === "asc"
-                    )
-                }
-            >
-                Expiry Date
-                <ArrowUpDown className="ml-2 h-4 w-4" />
-            </Button>
-        ),
+        header: "Expiry Date"
     },
     {
         accessorKey: "status",
@@ -136,18 +95,22 @@ export const createColumns = (handleAction) => [
                 </Badge>
             );
         },
-        header: ({ column }) => (
-            <Button
-                variant="ghost"
+        header: () => (
+            <button
                 onClick={() =>
-                    column.toggleSorting(
-                        column.getIsSorted() === "asc"
-                    )
+                    handleSort("status")
                 }
+                className="flex items-center gap-2"
             >
                 Status
-                <ArrowUpDown className="ml-2 h-4 w-4" />
-            </Button>
+                {
+                    sortBy === "status"
+                        ? sortDirection === "asc"
+                            ? <ArrowUp className="ml-2 h-4 w-4" />
+                            : <ArrowDown className="ml-2 h-4 w-4" />
+                        : <ArrowUpDown className="ml-2 h-4 w-4" />
+                }
+            </button>
         ),
     },
     {
@@ -168,7 +131,7 @@ export const createColumns = (handleAction) => [
                                     <DropdownMenuItem 
                                         key={item.value}
                                         className={item.className}
-                                        onClick={() => handleAction(row.index, item.action, row.original)}
+                                        onClick={() => handleAction(item.action, row.original)}
                                     >
                                         {item.label}
                                     </DropdownMenuItem>

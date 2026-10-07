@@ -65,7 +65,6 @@ export default function MemberDialog({
 
     const handleSubmit = async () => {
         try {
-
             if (mode === "create") {
                 const data = { ...formData, status: parseInt(formData.status), gender: parseInt(formData.gender) }
                 await createMember(data);

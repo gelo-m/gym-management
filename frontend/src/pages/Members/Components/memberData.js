@@ -2,42 +2,6 @@ import { Gender } from "../../../constants/gender";
 import { MemberStatus } from "../../../constants/memberStatus";
 import { MemberAction } from "../../../constants/memberAction";
 
-export const members = [
-    {
-        member_id: "MBR0001",
-        first_name: "John",
-        middle_name: "Wesley",
-        last_name: "Doe",
-        contact: "09171234567",
-        plan: "Monthly",
-        start_date: "2026-07-01",
-        expiry_date: "2026-08-01",
-        status: "Active",
-    },
-    {
-        member_id: "MBR0002",
-        first_name: "Jane",
-        middle_name: "Carter",
-        last_name: "Smith",
-        contact: "09181234567",
-        plan: "Annual",
-        start_date: "2026-01-01",
-        expiry_date: "2027-01-01",
-        status: "Active",
-    },
-    {
-        member_id: "MBR0003",
-        first_name: "Michael",
-        middle_name: "Angelo",
-        last_name: "Santos",
-        contact: "09191234567",
-        plan: "Monthly",
-        start_date: "2026-05-01",
-        expiry_date: "2026-06-01",
-        status: "Expired",
-    },
-];
-
 export const status = [
     { value: "", label: "All"},
     { value: MemberStatus.ACTIVE, label: "Active"},

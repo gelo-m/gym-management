@@ -79,7 +79,7 @@ export default function Login() {
                         </button>
                     </div>
 
-                    <Button className="w-full h-11 bg-blue-600 hover:bg-blue-700">
+                    <Button className="w-full h-11 bg-blue-600 hover:bg-blue-700 text-white">
                         Sign In
                     </Button>
                  </form>
