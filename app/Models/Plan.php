@@ -6,23 +6,23 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
 
-class MembershipPlan extends Model implements Auditable
+class Plan extends Model implements Auditable
 {
     use SoftDeletes;
     use \OwenIt\Auditing\Auditable;
 
     protected $fillable = [
-        'plan_code',
+        'code',
         'name',
         'description',
         'duration_days',
         'price',
-        'is_active',
+        'status',
     ];
 
     protected $casts = [
         'price' => 'decimal:2',
-        'is_active' => 'boolean',
+        'status' => 'boolean',
     ];
 
     public function subscriptions()

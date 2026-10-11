@@ -77,14 +77,14 @@ class MemberController extends Controller
 
         $filters = (object) $request->get('filters');
         $list = Member::select([
-                DB::raw("COUNT(id) as total_member"),
+                DB::raw("CAST(COUNT(id) AS CHAR) as all_member"),
                 DB::raw("
                     SUM(
                         CASE 
                             WHEN status != $active THEN -1
                             ELSE 1
                         END
-                    ) as total_active_member
+                    ) as active_member
                 "),
                 DB::raw("
                     SUM(
@@ -95,7 +95,7 @@ class MemberController extends Controller
                                     THEN -1
                             ELSE 1
                         END
-                    ) as total_active_member_current_month
+                    ) as new_this_month
                 "),
             ])
             ->whereNull('deleted_at')

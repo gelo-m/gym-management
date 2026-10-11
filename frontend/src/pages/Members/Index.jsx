@@ -38,7 +38,7 @@ export default function Members() {
     const [totalMember, setTotalMember] = useState({
         all: 0,
         active: 0,
-        active_current_month: 0,
+        new_this_month: 0,
     });
     const [sortBy, setSortBy] = useState("id");
     const [sortDirection, setSortDirection] = useState("desc");
@@ -92,7 +92,7 @@ export default function Members() {
         fetchMembers(1, filters, sortBy, sortDirection);
         fetchTotalMember(filters);
     }, []);
-    
+
     const fetchMembers = async (
         page = 1,
         filters = {},
@@ -113,8 +113,15 @@ export default function Members() {
     const fetchTotalMember = async (filters) => {
         try {
             const response = await getTotalMember(filters);
-            setTotalMember(response.data.data);
-            console.log(totalMember);
+            const data = response.data.data;
+
+            setTotalMember(totalMember => ({
+                    ...totalMember,
+                    all: data.all_member,
+                    active: data.active_member,
+                    new_this_month: data.new_this_month,
+                })
+            );
         } catch (error) {
             console.error(error);
         }
@@ -145,7 +152,7 @@ export default function Members() {
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-6">
                 <StatisticsCard
                     title="Total Members"
-                    value={totalMember.active}
+                    value={totalMember.all}
                     subvalue="+12 this week"
                     icon={Users}
                     iconBg="bg-blue-100"
@@ -153,7 +160,7 @@ export default function Members() {
                 />
                 <StatisticsCard
                     title="Active Members"
-                    value="1,120"
+                    value={totalMember.active}
                     subvalue="89% active"
                     icon={UserCheck}
                     iconBg="bg-green-100"
@@ -169,7 +176,7 @@ export default function Members() {
                 />
                 <StatisticsCard
                     title="New This Month"
-                    value="18"
+                    value={totalMember.new_this_month}
                     subvalue="+5 from last month"
                     icon={UserPlus}
                     iconBg="bg-purple-100"
@@ -186,7 +193,7 @@ export default function Members() {
                     <CardDescription>
                         Manage gym members and memberships
                     </CardDescription>
-                </CardHeader>   
+                </CardHeader>
                 <CardContent className="p-6">
                     <div className="flex justify-between mb-6">
                         <div className="flex justify-normal mb-6 gap-2">

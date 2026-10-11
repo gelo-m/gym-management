@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\MemberController;
+use App\Http\Controllers\Api\PlanController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,6 +16,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/members/total', [MemberController::class, 'totalMembers'])->name('members.total');
     Route::apiResource('/members', MemberController::class);
+    Route::apiResource('/plans', PlanController::class);
 });
 
 // Route::get('/user', function (Request $request) {

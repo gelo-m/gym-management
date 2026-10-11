@@ -11,18 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('membership_plans', function (Blueprint $table) {
+        Schema::create('plans', function (Blueprint $table) {
             $table->id();
-            $table->string('plan_code')->unique();
+            $table->string('code')->unique();
             $table->string('name');
             $table->text('description')->nullable();
             $table->integer('duration_days');
             $table->decimal('price', 12, 2);
-            $table->boolean('is_active')->default(true);
+            $table->boolean('status')->default(true);
             $table->timestamps();
             $table->softDeletes();
 
-            $table->index('plan_code');
+            $table->index('code');
         });
     }
 
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('membership_plans');
+        Schema::dropIfExists('plans');
     }
 };
